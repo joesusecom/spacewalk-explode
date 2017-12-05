@@ -1,0 +1,33 @@
+Stages:
+  - Dev
+  - QA
+  - Production
+
+Client_HW:
+  - NCR
+  - Diebold Nixdorf
+  - Dell
+  - Lenovo
+  - HP
+  - Toshiba
+  - Fujitsu
+
+Server_HW:
+  - Dell
+  - Lenovo
+  - IBM
+  - HPE
+  - Fujitsu
+
+Roles:
+  - SAP
+  - Web Server
+  - POS Terminal
+  - Kiosk
+  - Branch Server
+
+OS:
+  - SLES 11 SP4
+  - SLES 12 SP2
+  - SLES 12 SP3
+  - SLES 15
