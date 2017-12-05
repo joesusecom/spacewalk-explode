@@ -62,3 +62,11 @@ Just look at the source code of the **setup.py** script. :-)
 # Possible improvements
 * Currently, both the organization and group (location) creation take the first items in the list. While this makes the created groups deterministic, it would make sense to add an alternative mode where countries and cities are chosen randomly for more diversity.
 * There's very little error checking. For example, you may run out of cities if your MAX_CITIES value is too high.
+
+# What are your data sources? Are they all free to use?
+I've used the following data from public sources:
+* first names: https://data.sa.gov.au/data/dataset/popular-baby-names
+* cities: https://raw.githubusercontent.com/lutangar/cities.json/master/cities.json
+* countries: https://gist.github.com/keeguon/2310008
+Some data was corrected compared to the original files. To my knowledge, those sources are free to use. In general, mere collections of facts are only weakly copyrighted in most jurisdictions.
+
