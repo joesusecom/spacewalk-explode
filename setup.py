@@ -5,13 +5,13 @@ import json
 import yaml
 from random import choice
 
-MANAGER_URL = 'http://c576.arch.suse.de/rpc/api'
-MANAGER_LOGIN = 'admin'
-MANAGER_PASSWORD = 'admin'
-MAX_CITIES = 1
-MAX_COUNTRIES = 1
-GROUPS_FILE = 'groups_scenario_retail.yml'
-DUMMY_EMAIL = 'joe@suse.com'
+MANAGER_URL = 'http://url.to.your.server/rpc/api'
+MANAGER_LOGIN = 'login'
+MANAGER_PASSWORD = 'password'
+MAX_COUNTRIES = 10
+MAX_CITIES = 10
+GROUPS_FILE = 'your_groups_definitions.yml'
+DUMMY_EMAIL = 'name@domain'
 
 client = ServerProxy(MANAGER_URL, verbose=0)
 key = client.auth.login(MANAGER_LOGIN, MANAGER_PASSWORD)
