@@ -5,13 +5,13 @@ import json
 import yaml
 from random import choice
 
-MANAGER_URL = 'http://url.to.your.server/rpc/api'
-MANAGER_LOGIN = 'login'
-MANAGER_PASSWORD = 'password'
-MAX_COUNTRIES = 10
-MAX_CITIES = 10
-GROUPS_FILE = 'your_groups_definitions.yml'
-DUMMY_EMAIL = 'name@domain'
+MANAGER_URL = 'http://c576.arch.suse.de/rpc/api'
+MANAGER_LOGIN = 'admin'
+MANAGER_PASSWORD = 'admin'
+MAX_CITIES = 1
+MAX_COUNTRIES = 1
+GROUPS_FILE = 'groups_scenario_retail.yml'
+DUMMY_EMAIL = 'joe@suse.com'
 
 client = ServerProxy(MANAGER_URL, verbose=0)
 key = client.auth.login(MANAGER_LOGIN, MANAGER_PASSWORD)
@@ -51,7 +51,6 @@ for country in countries:
         email,
         False
         )
-    org_client = ServerProxy(MANAGER_URL, verbose=0)
     org_key = client.auth.login(login, MANAGER_PASSWORD)
 
     # Set up groups for cities of the world
@@ -61,7 +60,7 @@ for country in countries:
             break
         if country['code'] == city['country']:
             try:
-                org_client.systemgroup.create(
+                client.systemgroup.create(
                     org_key,
                     city['name'] + ' (LOCATION)',
                     'City of ' +
@@ -77,34 +76,34 @@ for country in countries:
 
     # Set up staging groups
     for stage in scenario['Stages']:
-        org_client.systemgroup.create(
+        client.systemgroup.create(
             org_key,
             stage + ' (STAGE)',
             stage + ' Systems'
             )
     # Set up HW type groups
     for hw in scenario['Server_HW']:
-        org_client.systemgroup.create(
+        client.systemgroup.create(
             org_key,
             hw + ' (SERVER HARDWARE TYPE)',
             hw + ' Server Systems'
             )
     for hw in scenario['Client_HW']:
-        org_client.systemgroup.create(
+        client.systemgroup.create(
             org_key,
             hw + ' (CLIENT HARDWARE TYPE)',
             hw + ' Client (Desktop, POS) Systems'
             )
     # Set up Role groups
     for role in scenario['Roles']:
-        org_client.systemgroup.create(
+        client.systemgroup.create(
             org_key,
             role + ' (ROLE)',
             role + ' System'
             )
     # Set up OS groups
     for os in scenario['OS']:
-        org_client.systemgroup.create(
+        client.systemgroup.create(
             org_key,
             os + ' (OS)',
             os
@@ -114,13 +113,13 @@ for country in countries:
     # Start with (POS) client hardware:
     for hw in scenario['Client_HW']:
         for role in ['POS Terminal', 'Branch Server']:
-            groups = org_client.systemgroup.listAllGroups(org_key)
+            groups = client.systemgroup.listAllGroups(org_key)
             for group in groups:
                 if 'LOCATION' in group['name']:
                     g = group['name'][:-11]
                     short_g = g[:12]
                     try:
-                        activationkey = org_client.activationkey.create(
+                        activationkey = client.activationkey.create(
                             org_key,
                             short_g + '_' + role + '_' + hw,
                             'Key to activate systems with role ' + role + ' from ' + hw + ' at location ' + g,
@@ -135,12 +134,12 @@ for country in countries:
                                 role_group = gg['id']
                             if gg['name'] == g + ' (LOCATION)':
                                 location_group = gg['id']
-                        org_client.activationkey.addServerGroups(
+                        client.activationkey.addServerGroups(
                             org_key,
                             activationkey,
                             [hw_group, role_group, location_group]
                             )
-                        org_client.activationkey.addChildChannels(
+                        client.activationkey.addChildChannels(
                             org_key,
                             activationkey,
                             ['sle-manager-tools12-pool-x86_64-sp3',
@@ -151,7 +150,7 @@ for country in countries:
                     except xmlrpclib.Fault:
                         print("ERROR ERROR ERROR (usually duplicate cities)")
 
-    org_client.auth.logout(org_key)
+    client.auth.logout(org_key)
     no_of_countries+=1
 
 client.auth.logout(key)
